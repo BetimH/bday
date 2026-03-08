@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Magical Birthday Adventure ❤️</title>
+<style>
+body {
+    margin:0;
+    padding:0;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    overflow:hidden;
+    background: linear-gradient(#ffe6f0, #fff0f5);
+    text-align:center;
+    color:#ff4d94;
+}
+
+#scene {
+    position:relative;
+    width:100%;
+    height:100vh;
+    overflow:hidden;
+}
+
+#story {
+    position:absolute;
+    top:30px;
+    left:50%;
+    transform:translateX(-50%);
+    width:90%;
+    max-width:800px;
+    font-size:22px;
+    line-height:1.5em;
+    text-shadow: 1px 1px 2px #fff;
+}
+
+#choices {
+    position:absolute;
+    bottom:40px;
+    left:50%;
+    transform:translateX(-50%);
+}
+
+.choice-btn {
+    background:#ff99cc;
+    border:none;
+    padding:15px 25px;
+    margin:10px;
+    font-size:18px;
+    border-radius:20px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.choice-btn:hover {
+    background:#ff4d94;
+    color:white;
+    transform:scale(1.05);
+}
+
+.heart, .star, .cloud {
+    position:absolute;
+    pointer-events:none;
+}
+
+@keyframes floatUp {
+    0% {transform: translateY(0) scale(1);}
+    50% {transform: translateY(-200px) scale(1.3);}
+    100% {transform: translateY(-400px) scale(1);}
+}
+
+@keyframes twinkle {
+    0%,100% {opacity:1;}
+    50% {opacity:0.3;}
+}
+</style>
+</head>
+<body>
+
+<div id="scene">
+    <div id="story">Loading your magical birthday adventure...</div>
+    <div id="choices"></div>
+</div>
+
+<audio id="bgmusic" loop>
+<source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_cceee7e99b.mp3?filename=happy-birthday-123177.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+// -------------------
+// Utility Animations
+// -------------------
+function createHeart(){
+    const heart = document.createElement('div');
+    heart.className='heart';
+    heart.innerHTML='❤️';
+    heart.style.left = Math.random()*window.innerWidth+'px';
+    heart.style.top = (window.innerHeight+50)+'px';
+    heart.style.fontSize = (20 + Math.random()*30)+'px';
+    heart.style.animation = `floatUp ${4 + Math.random()*3}s linear forwards`;
+    document.getElementById('scene').appendChild(heart);
+    setTimeout(()=>heart.remove(),7000);
+}
+setInterval(createHeart,300);
+
+function createStar(){
+    const star = document.createElement('div');
+    star.className='star';
+    star.innerHTML='⭐';
+    star.style.left = Math.random()*window.innerWidth+'px';
+    star.style.top = (window.innerHeight+50)+'px';
+    star.style.fontSize = (15 + Math.random()*20)+'px';
+    star.style.animation = `floatUp ${5 + Math.random()*4}s linear forwards, twinkle ${1+Math.random()*2}s infinite`;
+    document.getElementById('scene').appendChild(star);
+    setTimeout(()=>star.remove(),9000);
+}
+setInterval(createStar,500);
+
+// -------------------
+// Story Logic
+// -------------------
+let step = 0;
+const story = document.getElementById('story');
+const choices = document.getElementById('choices');
+const music = document.getElementById('bgmusic');
+
+function showStep(){
+    choices.innerHTML='';
+    story.innerHTML='';
+
+    if(step===0){
+        music.play();
+        story.innerHTML="🌸 Good morning, Isra! 🌸<br> A magical letter has appeared on your bedside table...";
+        choices.innerHTML=`<button class="choice-btn" onclick="step=1;showStep()">Open the letter</button>`;
+    }
+    else if(step===1){
+        story.innerHTML="The letter glows softly: <br>'Welcome to your birthday adventure! Follow the paths of hearts or stars to find surprises!' 💖✨";
+        choices.innerHTML=`
+        <button class="choice-btn" onclick="step=2;showStep()">Follow the Heart Path 💖</button>
+        <button class="choice-btn" onclick="step=3;showStep()">Follow the Star Path ✨</button>
+        `;
+    }
+    else if(step===2){
+        story.innerHTML="You step into a forest of floating hearts and fluttering butterflies. Each heart holds a sweet message for you.";
+        for(let i=0;i<5;i++) createHeart();
+        choices.innerHTML=`<button class="choice-btn" onclick="step=4;showStep()">Collect the love messages</button>`;
+    }
+    else if(step===3){
+        story.innerHTML="You float into a sparkling night sky full of twinkling stars. Some stars wink at you like they know your secrets!";
+        for(let i=0;i<5;i++) createStar();
+        choices.innerHTML=`<button class="choice-btn" onclick="step=5;showStep()">Make a wish on the stars</button>`;
+    }
+    else if(step===4){
+        story.innerHTML="Each heart message says: 'You are amazing', 'I love you', 'You light up my life' ❤️";
+        choices.innerHTML=`<button class="choice-btn" onclick="step=6;showStep()">Continue</button>`;
+    }
+    else if(step===5){
+        story.innerHTML="You make a wish: 'May every moment be full of joy and love!' ✨";
+        choices.innerHTML=`<button class="choice-btn" onclick="step=6;showStep()">Continue</button>`;
+    }
+    else if(step===6){
+        story.innerHTML="A gentle breeze brings you to a field of soft clouds. Little bunnies hop and giggle, holding tiny sparkling gifts.";
+        for(let i=0;i<3;i++) createHeart();
+        choices.innerHTML=`
+        <button class="choice-btn" onclick="step=7;showStep()">Pick a gift from a bunny 🎁</button>
+        <button class="choice-btn" onclick="step=8;showStep()">Watch them play 🐰</button>
+        `;
+    }
+    else if(step===7){
+        story.innerHTML="You open the gift: a small glowing heart floats up and bursts into tiny stars around you!";
+        for(let i=0;i<10;i++) createStar();
+        choices.innerHTML=`<button class="choice-btn" onclick="step=9;showStep()">Continue</button>`;
+    }
+    else if(step===8){
+        story.innerHTML="You watch them play and laugh. The bunnies form a heart shape in the clouds 💕";
+        for(let i=0;i<5;i++) createHeart();
+        choices.innerHTML=`<button class="choice-btn" onclick="step=9;showStep()">Continue</button>`;
+    }
+    else if(step===9){
+        story.innerHTML="Suddenly, a rainbow appears, glittering across the sky. Each color carries a little memory from our time together 🌈";
+        choices.innerHTML=`<button class="choice-btn" onclick="step=10;showStep()">Walk along the rainbow</button>`;
+    }
+    else if(step===10){
+        story.innerHTML="At the rainbow's end, a magical treasure chest opens. Inside: a sparkling message just for you!";
+        choices.innerHTML=`<button class="choice-btn" onclick="step=11;showStep()">Open the message</button>`;
+    }
+    else if(step===11){
+        story.innerHTML="🎉 HAPPY BIRTHDAY Isra! 🎉<br> You are the most amazing girlfriend in the world! I love you ❤️";
+        for(let i=0;i<20;i++){
+            createHeart();
+            createStar();
+        }
+        choices.innerHTML=`<button class="choice-btn" onclick="step=12;showStep()">Celebrate!</button>`;
+    }
+    else if(step===12){
+        story.innerHTML="Fireworks of hearts and stars fill the sky! 🌟💖✨<br>Dance among them and know how much you are loved.";
+        for(let i=0;i<30;i++){
+            createHeart();
+            createStar();
+        }
+        choices.innerHTML=`<button class="choice-btn" onclick="step=13;showStep()">The End 🌸</button>`;
+    }
+    else if(step===13){
+        story.innerHTML="Thank you for joining this magical adventure. 💖🎉<br>Every day with you is a new story!";
+        choices.innerHTML='';
+    }
+}
+
+// Start
+showStep();
+</script>
+
+</body>
+</html>
